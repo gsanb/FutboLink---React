@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Layout from "../components/Layout";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-export default function CreateTeam() {
+export default function EditTeam() {
   const { isAuthenticated, role, isLoading } = useAuth();
   const navigate = useNavigate();
+  const { id } = useParams();
   
   const [form, setForm] = useState({
     name: "",
@@ -16,11 +17,9 @@ export default function CreateTeam() {
   });
 
   const [logo, setLogo] = useState(null);
+  const [currentLogo, setCurrentLogo] = useState("");
   const [error, setError] = useState("");
-
-    const goToTeam = (id) => {
-    navigate(`/teams/${id}`);
-  };
+  const [loading, setLoading] = useState(true);
 
   // Configuración del tema
   useEffect(() => {
@@ -38,43 +37,81 @@ export default function CreateTeam() {
     }
   }, [isAuthenticated, role, isLoading, navigate]);
 
+  // Cargar datos del equipo
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`http://localhost:8080/api/teams/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        const team = response.data;
+        setForm({
+          name: team.name,
+          location: team.location,
+          category: team.category,
+          description: team.description
+        });
+        
+        if (team.logoPath) {
+          setCurrentLogo(`http://localhost:8080${team.logoPath}`);
+        }
+        
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError("Error al cargar los datos del equipo");
+        setLoading(false);
+      }
+    };
+
+    if (isAuthenticated && role === "TEAM") {
+      fetchTeam();
+    }
+  }, [id, isAuthenticated, role]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const token = localStorage.getItem("token");
-    const formData = new FormData();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
 
-    for (let key in form) {
-      formData.append(key, form[key]);
+      for (let key in form) {
+        formData.append(key, form[key]);
+      }
+
+      if (logo) {
+        formData.append("logo", logo);
+      }
+
+      const response = await axios.put(
+        `http://localhost:8080/api/teams/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        navigate(`/teams/${id}`);
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Error al actualizar el equipo");
     }
+  };
 
-    if (logo) {
-      formData.append("logo", logo);
-    }
-
-    const response = await axios.post("http://localhost:8080/api/teams", formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    if (response.status === 201) {
-      const createdTeam = response.data;
-      navigate(`/teams/${createdTeam.id}`);
-    }
-  } catch (err) {
-    console.error(err);
-    setError(err.response?.data?.message || "Error al crear el equipo");
-  }
-};
-
-
-  if (isLoading) {
+  if (isLoading || loading) {
     return (
       <Layout>
         <div className="flex justify-center items-center h-screen">
@@ -91,7 +128,7 @@ const handleSubmit = async (e) => {
           onSubmit={handleSubmit}
           className="card w-full max-w-md bg-base-100 shadow-xl p-6 space-y-4"
         >
-          <h2 className="text-2xl font-bold text-center">Crear Equipo</h2>
+          <h2 className="text-2xl font-bold text-center">Editar Equipo</h2>
           
           {error && (
             <div className="alert alert-error">
@@ -106,12 +143,25 @@ const handleSubmit = async (e) => {
             <label className="label">
               <span className="label-text">Logo del equipo</span>
             </label>
+            {currentLogo && (
+              <div className="mb-4">
+                <img 
+                  src={currentLogo} 
+                  alt="Logo actual" 
+                  className="w-32 h-32 object-contain mx-auto rounded-lg"
+                />
+                <p className="text-center text-sm mt-2">Logo actual</p>
+              </div>
+            )}
             <input
               type="file"
               accept="image/*"
               className="file-input file-input-bordered w-full"
               onChange={(e) => setLogo(e.target.files[0])}
             />
+            <label className="label">
+              <span className="label-text-alt">Deja en blanco para mantener el logo actual</span>
+            </label>
           </div>
 
           <div className="form-control">
@@ -173,9 +223,18 @@ const handleSubmit = async (e) => {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-full mt-4">
-            Crear Equipo
-          </button>
+          <div className="flex space-x-4">
+            <button 
+              type="button" 
+              className="btn btn-outline flex-1"
+              onClick={() => navigate(`/teams/${id}`)}
+            >
+              Cancelar
+            </button>
+            <button type="submit" className="btn btn-primary flex-1">
+              Guardar Cambios
+            </button>
+          </div>
         </form>
       </div>
     </Layout>

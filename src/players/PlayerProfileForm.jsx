@@ -6,6 +6,7 @@ export default function PlayerProfileForm() {
   const { token, isAuthenticated, isLoading } = useAuth();
 
   const [profile, setProfile] = useState({
+    name:"",
     age: "",
     position: "",
     skills: "",
@@ -63,6 +64,17 @@ export default function PlayerProfileForm() {
   return (
     <div className="max-w-xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Mi perfil de jugador</h1>
+
+      <div className="form-control mb-3">
+        <label className="label">Nombre</label>
+        <input
+          type="text"
+          name="name"
+          className="input input-bordered"
+          value={profile.name}
+          onChange={handleChange}
+        />
+      </div>
 
       <div className="form-control mb-3">
         <label className="label">Edad</label>

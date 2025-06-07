@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode"; // Instalar con: npm install jwt-decode
+import { jwtDecode } from "jwt-decode"; 
+import { useNavigate } from "react-router-dom";
+import Layout from "../components/Layout"; // Asegúrate que la ruta sea correcta
+
 
 document.documentElement.setAttribute("data-theme", "lemonade");
 
-export default function Offers() {
+export default function Teams() {
   const [teams, setTeams] = useState([]);
   const [authState, setAuthState] = useState({
     isAuthenticated: false,
     role: null,
     isLoading: true
   });
+  const navigate = useNavigate();
+
+  const goToTeam = (id) => {
+    navigate(`/teams/${id}`);
+  };
+
 
   useEffect(() => {
     // Verificar autenticación y obtener rol
@@ -91,11 +100,12 @@ export default function Offers() {
   }
 
   return (
+    <Layout publicRoute>
     <div className="min-h-screen p-8 bg-base-200">
       <h1 className="text-3xl font-bold mb-6 text-center">Ofertas de Equipos</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {teams.map((team) => (
-          <div key={team.id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+          <div key={team.id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow cursor-pointer" onClick={() => goToTeam(team.id)}>
             {team.logoPath && (
               <figure className="px-4 pt-4">
                 <img
@@ -120,6 +130,22 @@ export default function Offers() {
                   >
                     Unirse al equipo
                   </button>
+                  {authState.isAuthenticated &&
+                    authState.role === "TEAM" &&
+                    team.user?.id === authState.userId && (
+                      <div className="card-actions justify-end mt-4 space-x-2">
+                        <button
+                          className="btn btn-outline btn-warning"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevenir navegación
+                            navigate(`/teams/${team.id}/edit`);
+                          }}
+                        >
+                          Editar Equipo
+                        </button>
+                          </div>
+                        )}
+
                 </div>
               )}
             </div>
@@ -127,5 +153,6 @@ export default function Offers() {
         ))}
       </div>
     </div>
+    </Layout>
   );
 }
