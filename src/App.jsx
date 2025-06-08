@@ -14,32 +14,35 @@ import PlayerApplicationsPage from "./PlayerApplicationPage";
 import Unauthorized from "./Unauthorized";
 import MyTeams from "./teams/MyTeams";
 import EditTeam from "./teams/EditTeam";
+import Chat from "./chat/Chat";
+
 
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/createTeam" element={<CreateTeam />} />
-        <Route path="/teams" element={<Teams />} />
-        <Route path="/teams/:id" element={<TeamDetails />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="createPlayer" element={<PlayerProfileForm/>} />
-        <Route path="playerProfile/:id" element={<PlayerProfile />} />
-        <Route path="/teamApplications" element={<TeamApplications />} />
-        <Route path="/applicationStatus/:teamId" element={<ApplicationStatus />} />
-        <Route path="/applications" element={<PlayerApplicationsPage />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="/myTeams" element={<MyTeams />} />
-        <Route path="/editTeam/:id" element={<EditTeam />} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/createTeam" element={<CreateTeam />} />
+            <Route path="/teams" element={<Teams />} />
+            <Route path="/teams/:id" element={<TeamDetails />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/createPlayer" element={<PlayerProfileForm/>} />
+            <Route path="/playerProfile/:id" element={<PlayerProfile />} />
+            <Route path="/teamApplications" element={<TeamApplications />} />
+            <Route path="/applicationStatus/:teamId" element={<ApplicationStatus />} />
+            <Route path="/applications" element={<PlayerApplicationsPage />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="/myTeams" element={<MyTeams />} />
+            <Route path="/editTeam/:id" element={<EditTeam />} />
+            <Route path="/chat/:applicationId" element={<Chat />} />
+            
 
-        
-
-      </Routes>
-    </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+   
   );
 }

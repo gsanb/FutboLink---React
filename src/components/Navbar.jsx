@@ -1,10 +1,18 @@
 // src/components/Navbar.jsx
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import useNotifications from "../hooks/useNotifications";
+import { Bell } from "lucide-react";
+
+
 
 export default function Navbar({ showAuthButtons = true }) {
   const navigate = useNavigate();
   const { role, isAuthenticated } = useAuth();
+
+const { notifications, markAllAsRead } = useNotifications();
+const unreadCount = notifications.length;
+
 
   return (
     <div className="navbar bg-base-300">
@@ -29,7 +37,32 @@ export default function Navbar({ showAuthButtons = true }) {
               Crear Equipo
             </button>
           )}
-          
+          <div className="dropdown dropdown-end">
+              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+                <div className="indicator">
+                  <Bell className="w-5 h-5" />
+                  {unreadCount > 0 && (
+                    <span className="badge badge-sm indicator-item">{unreadCount}</span>
+                  )}
+                </div>
+              </div>
+                      <ul
+              tabIndex={0}
+              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-80"
+              onMouseLeave={() => markAllAsRead()} // o usa onClick si prefieres
+            >
+              {notifications.length === 0 ? (
+                <li className="text-center">No hay notificaciones</li>
+              ) : (
+                notifications.slice(0, 5).map((n) => (
+                  <li key={n.id}>
+                    <span className="text-sm">{n.message}</span>
+                  </li>
+                ))
+              )}
+            </ul>
+
+          </div>
           <button 
             className="btn btn-ghost"
             onClick={() => {
