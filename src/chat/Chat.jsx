@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from "axios";
-import useAuth from '../hooks/useAuth'; // Asegúrate de que la ruta sea correcta
+import useAuth from '../hooks/useAuth';
 import Layout from "../components/Layout";
-
+import { User, Users, SendHorizonal, Loader2, AlertCircle } from 'lucide-react';
 
 export default function Chat() {
   const { applicationId } = useParams();
@@ -16,7 +16,7 @@ export default function Chat() {
   // Función para obtener mensajes
   const fetchMessages = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/chat/${applicationId}`, {  // <-- backticks para template string
+      const res = await axios.get(`http://localhost:8080/api/chat/${applicationId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -35,13 +35,13 @@ export default function Chat() {
     if (!content.trim() || !isAuthenticated) return;
 
     try {
-      await axios.post(`http://localhost:8080/api/chat/${applicationId}`, { content }, {  // <-- backticks aquí también
+      await axios.post(`http://localhost:8080/api/chat/${applicationId}`, { content }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setContent('');
-      fetchMessages(); // Recarga mensajes tras enviar
+      fetchMessages();
     } catch (err) {
       console.error(err);
     }
@@ -54,66 +54,109 @@ export default function Chat() {
       const interval = setInterval(fetchMessages, 10000);
       return () => clearInterval(interval);
     }
-  }, [isAuthenticated, applicationId, token]);  // <-- incluye token
+  }, [isAuthenticated, applicationId, token]);
 
-  // Scroll automático al final cuando cambian los mensajes
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  
 
   // Formatear fecha para mostrar hora y minutos
-  const formatDate = (dateStr) => new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formatDate = (dateStr) =>
+    new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   if (!isAuthenticated) {
     return (
-      <div className="max-w-3xl mx-auto p-4">
-        <div className="alert alert-warning">Debes iniciar sesión para acceder al chat</div>
-      </div>
+      <Layout>
+        <div className="min-h-screen bg-gradient-to-b from-base-200 to-base-100 flex items-center">
+          <div className="max-w-lg mx-auto w-full">
+            <div className="alert alert-warning flex items-center gap-2">
+              <AlertCircle className="w-6 h-6" />
+              Debes iniciar sesión para acceder al chat.
+            </div>
+          </div>
+        </div>
+      </Layout>
     );
   }
 
   return (
     <Layout>
-    <div className="max-w-3xl mx-auto p-4">
-      <div className="bg-base-200 shadow-xl rounded-xl p-4 h-[70vh] overflow-y-auto">
-        {loading ? (
-          <div className="text-center">Cargando mensajes...</div>
-        ) : (
-          messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`chat ${msg.senderRole === 'PLAYER' ? 'chat-start' : 'chat-end'}`}
-            >
-              <div className="chat-header">
-                {msg.senderRole === 'PLAYER' ? 'Jugador' : 'Equipo'}
-                <time className="text-xs opacity-50 ml-2">{formatDate(msg.timestamp)}</time>
-              </div>
-              <div className="chat-bubble">{msg.content}</div>
-            </div>
-          ))
-        )}
-        <div ref={bottomRef}></div>
-      </div>
+      <div className="min-h-screen bg-gradient-to-b from-base-200 to-base-100 py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          {/* Cabecera del chat */}
+          <div className="flex items-center gap-3 mb-6">
+            <Users className="w-7 h-7 text-primary" />
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Conversación
+            </h1>
+          </div>
 
-      {/* Formulario para enviar mensaje */}
-      <form onSubmit={sendMessage} className="mt-4 flex gap-2">
-        <input
-          type="text"
-          placeholder="Escribe tu mensaje"
-          className="input input-bordered w-full"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          disabled={!isAuthenticated}
-        />
-        <button 
-          type="submit" 
-          className="btn btn-primary"
-          disabled={!isAuthenticated || !content.trim()}
-        >
-          Enviar
-        </button>
-      </form>
-    </div>
+          {/* Zona de mensajes */}
+          <div className="card bg-base-100 shadow-xl rounded-xl h-[60vh] md:h-[70vh] overflow-y-auto p-4 mb-4">
+            {loading ? (
+              <div className="flex justify-center items-center h-full">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <span className="ml-3 text-lg text-primary">Cargando mensajes...</span>
+              </div>
+            ) : messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center opacity-60">
+                <User className="w-12 h-12 mb-2" />
+                <p className="text-lg">No hay mensajes aún.</p>
+                <p className="text-sm">¡Envía el primer mensaje!</p>
+              </div>
+            ) : (
+              messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`chat ${msg.senderRole === 'PLAYER' ? 'chat-start' : 'chat-end'} mb-2`}
+                >
+                  <div className="chat-header flex items-center gap-2 mb-1">
+                    {msg.senderRole === 'PLAYER' ? (
+                      <User className="w-4 h-4 text-primary" />
+                    ) : (
+                      <Users className="w-4 h-4 text-secondary" />
+                    )}
+                    <span className="font-semibold text-base">
+                      {msg.senderRole === 'PLAYER' ? 'Jugador' : 'Equipo'}
+                    </span>
+                    <time className="text-xs opacity-50 ml-2">{formatDate(msg.timestamp)}</time>
+                  </div>
+                  <div
+                    className={`chat-bubble ${
+                      msg.senderRole === 'PLAYER'
+                        ? 'bg-primary text-primary-content'
+                        : 'bg-secondary text-secondary-content'
+                    }`}
+                  >
+                    {msg.content}
+                  </div>
+                </div>
+              ))
+            )}
+            <div ref={bottomRef}></div>
+          </div>
+
+          {/* Formulario para enviar mensaje */}
+          <form onSubmit={sendMessage} className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Escribe tu mensaje"
+              className="input input-bordered input-primary w-full"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              disabled={!isAuthenticated}
+              maxLength={500}
+            />
+            <button
+              type="submit"
+              className="btn btn-primary flex items-center gap-2"
+              disabled={!isAuthenticated || !content.trim()}
+              title="Enviar"
+            >
+              <SendHorizonal className="w-5 h-5" />
+              <span className="hidden sm:inline">Enviar</span>
+            </button>
+          </form>
+        </div>
+      </div>
     </Layout>
   );
 }

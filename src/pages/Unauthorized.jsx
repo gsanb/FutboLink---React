@@ -1,5 +1,5 @@
 // src/pages/Unauthorized.jsx
-import Layout from "./components/Layout";
+import Layout from "../components/Layout";
 import { useNavigate } from "react-router-dom";
 
 export default function Unauthorized() {
@@ -15,17 +15,12 @@ export default function Unauthorized() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
-            <h1 className="text-5xl font-bold mb-4">403 - Acceso no autorizado</h1>
+            <h1 className="text-5xl font-bold mb-4">Acceso no autorizado</h1>
             <p className="text-xl mb-8">
               No tienes permiso para acceder a esta página con tu rol actual.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={() => navigate(-1)} 
-                className="btn btn-primary"
-              >
-                ← Volver atrás
-              </button>
+              
               <button 
                 onClick={() => navigate("/home")} 
                 className="btn btn-ghost"
@@ -37,7 +32,7 @@ export default function Unauthorized() {
                   localStorage.removeItem("token");
                   navigate("/login");
                 }} 
-                className="btn btn-outline btn-error"
+                className="btn btn-ghost btn-error"
               >
                 Cerrar sesión
               </button>

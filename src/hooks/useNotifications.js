@@ -52,7 +52,7 @@ export default function useNotifications() {
   useEffect(() => {
     fetchNotifications(); // primera carga
 
-    const interval = setInterval(fetchNotifications, 30000); // cada 30 segundos
+    const interval = setInterval(fetchNotifications, 30000); // cada 30 segundos se consulta para ver si existe una notificacion
 
     return () => clearInterval(interval);
   }, [token]);

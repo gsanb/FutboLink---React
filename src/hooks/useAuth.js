@@ -7,7 +7,7 @@ export default function useAuth() {
     role: null,
     isLoading: true,
     token: null,
-    userId: null, // <- nuevo
+    userId: null, 
   });
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function useAuth() {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        console.log("Token decodificado:", decoded); // <--- 🔍 MIRA AQUÍ
+        console.log("Token decodificado:", decoded); 
         const now = Date.now() / 1000;
 
         if (decoded.exp < now) {

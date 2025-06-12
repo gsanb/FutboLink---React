@@ -12,6 +12,7 @@ export default function TeamDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  //Obtenemos el equipo por su ID
   useEffect(() => {
     const fetchTeam = async () => {
       try {
@@ -30,6 +31,31 @@ export default function TeamDetails() {
     }
   }, [id, authLoading]);
 
+    const applyToTeam = async (teamId) => {
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+      alert("Debes iniciar sesión como jugador para aplicar");
+      return;
+    }
+
+    try {
+      await axios.post(
+        `http://localhost:8080/api/applications/apply/${teamId}`,
+        "Me gustaría unirme a su equipo",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "text/plain"
+          }
+        }
+      );
+      alert("¡Solicitud enviada con éxito!");
+    } catch (err) {
+      alert(err.response?.data?.message || "Error al procesar tu solicitud");
+    }
+  };
+  // Si aún se está cargando la autenticación o los datos del equipo, mostramos un spinner
   if (authLoading || loading) {
     return (
       <Layout>
@@ -58,7 +84,7 @@ export default function TeamDetails() {
       </Layout>
     );
   }
-
+//Devuelve el componente con los detalles del equipo
   return (
     <Layout>
       <div className="min-h-screen p-8 bg-base-200">
@@ -101,12 +127,12 @@ export default function TeamDetails() {
             
             {isAuthenticated && role === "PLAYER" && (
               <div className="card-actions justify-end mt-6">
-                <button 
-                  className="btn btn-primary"
-                  onClick={() => navigate(`/apply-to-team/${team.id}`)}
-                >
-                  Solicitar unirse al equipo
-                </button>
+                 <button
+                      className="btn btn-primary"
+                      onClick={() => applyToTeam(team.id)}
+                    >
+                      Unirse al equipo
+                    </button>
               </div>
             )}
           </div>

@@ -1,20 +1,21 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Home from "./Home";
+import Home from "./pages/Home";
 import CreateTeam from "./teams/CreateTeam";  
 import Teams from "./teams/Teams";
-import Settings from "./Settings";
+import Settings from "./pages/Settings";
 import PlayerProfileForm from "./players/PlayerProfileForm";
 import PlayerProfile from "./players/PlayerProfile";
-import TeamApplications from "./TeamApplications";
-import ApplicationStatus from "./ApplicationStatus";
+import TeamApplications from "./teams/TeamApplications";
 import TeamDetails from "./teams/TeamDetails";
-import PlayerApplicationsPage from "./PlayerApplicationPage";
-import Unauthorized from "./Unauthorized";
+import PlayerApplicationPage from "./players/PlayerApplicationPage";
+import Unauthorized from "./pages/Unauthorized";
 import MyTeams from "./teams/MyTeams";
 import EditTeam from "./teams/EditTeam";
 import Chat from "./chat/Chat";
+import ChatList from "./chat/ChatList";
+import EditPlayerProfile from "./players/EditPlayerProfile";
 
 
 
@@ -33,12 +34,14 @@ export default function App() {
             <Route path="/createPlayer" element={<PlayerProfileForm/>} />
             <Route path="/playerProfile/:id" element={<PlayerProfile />} />
             <Route path="/teamApplications" element={<TeamApplications />} />
-            <Route path="/applicationStatus/:teamId" element={<ApplicationStatus />} />
-            <Route path="/applications" element={<PlayerApplicationsPage />} />
+            <Route path="/applications" element={<PlayerApplicationPage />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/myTeams" element={<MyTeams />} />
             <Route path="/editTeam/:id" element={<EditTeam />} />
             <Route path="/chat/:applicationId" element={<Chat />} />
+            <Route path="/chats" element={<ChatList />} />
+            <Route path="/editPlayerProfile" element={<EditPlayerProfile />} />
+            <Route path="*" element={<Navigate to="/home" replace />} />
             
 
           </Routes>

@@ -1,15 +1,21 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-    document.documentElement.setAttribute("data-theme", "lemonade");
+import { User, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react";
+document.documentElement.setAttribute("data-theme", "lemonade");
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
-  
+
+  // Maneja el envío del formulario de inicio de sesión
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
     try {
       const res = await axios.post("http://localhost:8080/auth/login", {
         email,
@@ -17,41 +23,92 @@ export default function Login() {
       });
 
       localStorage.setItem("token", res.data.access_token);
-
+      //rEDirigimos al usuario a la página de inicio
       navigate("/home");
-      alert("Login exitoso");
     } catch (err) {
       console.error(err);
-      alert("Error al iniciar sesión");
+      setErrorMsg("Error al iniciar sesión. Verifica tus credenciales.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-base-200">
-      <form onSubmit={handleLogin} className="card w-96 bg-base-100 shadow-xl p-8 space-y-4">
-        <h2 className="text-2xl font-bold text-center">Iniciar Sesión</h2>
-        <input
-          type="email"
-          placeholder="Correo"
-          className="input input-bordered w-full"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          className="input input-bordered w-full"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button className="btn btn-primary w-full" type="submit">
-          Entrar
+    <div className="min-h-screen bg-gradient-to-b from-base-200 to-base-100 flex items-center justify-center">
+      <form
+        onSubmit={handleLogin}
+        className="card w-full max-w-md bg-base-100 shadow-xl px-8 py-10 space-y-6"
+      >
+        <div className="flex flex-col items-center mb-4">
+          <LogIn className="w-10 h-10 text-primary mb-2" />
+          <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Iniciar Sesión
+          </h2>
+        </div>
+
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text flex items-center gap-1 font-semibold">
+              <User className="w-4 h-4" />
+              Correo electrónico
+            </span>
+          </label>
+          <input
+            type="email"
+            placeholder="correo@ejemplo.com"
+            className="input input-bordered input-primary w-full"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoFocus
+          />
+        </div>
+
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text flex items-center gap-1 font-semibold">
+              <Lock className="w-4 h-4" />
+              Contraseña
+            </span>
+          </label>
+          <input
+            type="password"
+            placeholder="Contraseña"
+            className="input input-bordered input-primary w-full"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        {errorMsg && (
+          <div className="alert alert-error flex items-center gap-2">
+            <AlertCircle className="w-5 h-5" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        <button
+          className="btn btn-primary w-full flex items-center justify-center gap-2"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Entrando...</span>
+            </>
+          ) : (
+            <>
+              <LogIn className="w-5 h-5" />
+              <span>Entrar</span>
+            </>
+          )}
         </button>
-        <div className="text-center mt-4">
+
+        <div className="text-center mt-4 text-base-content/70">
           <span>¿No tienes cuenta? </span>
-          <Link to="/register" className="link link-primary">
+          <Link to="/register" className="link link-primary font-semibold">
             Regístrate aquí
           </Link>
         </div>
