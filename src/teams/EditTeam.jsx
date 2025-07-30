@@ -4,6 +4,8 @@ import Layout from "../components/Layout";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { Users, Upload, MapPin, Award, Info, ArrowLeft, Save, X } from "lucide-react";
+import { API_URL } from '../config';
+
 
 export default function EditTeam() {
   const { isAuthenticated, role, isLoading, userId } = useAuth();
@@ -39,7 +41,7 @@ export default function EditTeam() {
   const fetchTeam = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://localhost:8080/api/teams/${id}`, {
+      const response = await axios.get(`${API_URL}/api/teams/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -62,8 +64,8 @@ export default function EditTeam() {
       });
       
       if (team.logoPath) {
-        setCurrentLogo(`http://localhost:8080${team.logoPath}`);
-        setLogoPreview(`http://localhost:8080${team.logoPath}`);
+        setCurrentLogo(`${API_URL}${team.logoPath}`);
+        setLogoPreview(`${API_URL}${team.logoPath}`);
       }
       
       setLoading(false);
@@ -110,7 +112,7 @@ export default function EditTeam() {
       }
 
       const response = await axios.put(
-        `http://localhost:8080/api/teams/${id}`,
+        `${API_URL}/api/teams/${id}`,
         formData,
         {
           headers: {

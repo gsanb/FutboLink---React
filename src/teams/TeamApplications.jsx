@@ -4,6 +4,8 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
 import { Mail, User, Check, X, MessageSquare, Clock, AlertCircle } from "lucide-react";
+import { API_URL } from '../config';
+
 
 export default function TeamApplications() {
   const [applications, setApplications] = useState([]);
@@ -20,7 +22,7 @@ export default function TeamApplications() {
     const fetchApplications = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:8080/api/applications/team", {
+        const res = await axios.get("${API_URL}/api/applications/team", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -41,7 +43,7 @@ export default function TeamApplications() {
   const updateStatus = async (id, action) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:8080/api/applications/${id}/${action}`, null, {
+      await axios.put(`${API_URL}/api/applications/${id}/${action}`, null, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

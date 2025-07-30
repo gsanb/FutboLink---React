@@ -4,6 +4,7 @@ import axios from "axios";
 import useAuth from '../hooks/useAuth';
 import Layout from "../components/Layout";
 import { User, Users, SendHorizonal, Loader2, AlertCircle } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function Chat() {
   const { applicationId } = useParams();
@@ -16,7 +17,7 @@ export default function Chat() {
   // Función para obtener mensajes
   const fetchMessages = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/chat/${applicationId}`, {
+      const res = await axios.get(`${API_URL}/api/chat/${applicationId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

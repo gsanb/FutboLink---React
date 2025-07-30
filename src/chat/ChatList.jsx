@@ -4,6 +4,7 @@ import axios from 'axios';
 import useAuth from '../hooks/useAuth';
 import Layout from '../components/Layout';
 import { MessageSquare, Users, AlertCircle, Loader2 } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function ChatList() {
   const [chats, setChats] = useState([]);
@@ -13,7 +14,7 @@ export default function ChatList() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/api/chat', {
+        const res = await axios.get('${API_URL}/api/chat', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

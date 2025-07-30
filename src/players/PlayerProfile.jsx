@@ -4,6 +4,8 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
 import { ArrowLeft, Mail, User, Award, Info } from "lucide-react";
+import { API_URL } from '../config';
+
 
 export default function VerPerfilJugador() {
   const { isAuthenticated, role } = useAuth();
@@ -24,7 +26,7 @@ export default function VerPerfilJugador() {
           } 
         } : {};
         
-        const response = await axios.get(`http://localhost:8080/api/player/${id}`, config);
+        const response = await axios.get(`${API_URL}/api/player/${id}`, config);
         setPlayer(response.data);
         setError(null);
       } catch (err) {

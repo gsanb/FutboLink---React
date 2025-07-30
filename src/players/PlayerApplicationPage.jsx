@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
 import { Mail, User, Check, X, Clock, AlertCircle, MessageSquare } from "lucide-react";
+import { API_URL } from '../config';
+
 
 export default function PlayerApplicationsPage() {
   const authState = useAuth();
@@ -20,7 +22,7 @@ export default function PlayerApplicationsPage() {
 
     const fetchApplications = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/applications/player", {
+        const res = await axios.get("${API_URL}/api/applications/player", {
           headers: {
             Authorization: `Bearer ${authState.token}`,
           },

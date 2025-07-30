@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
 import { Users, PlusCircle, Edit, Trash2, MapPin, Award, AlertTriangle } from "lucide-react";
+import { API_URL } from '../config';
+
 
 export default function MyTeams() {
   const [teams, setTeams] = useState([]);
@@ -27,7 +29,7 @@ export default function MyTeams() {
       const fetchTeams = async () => {
         try {
           const token = localStorage.getItem("token");
-          const res = await axios.get("http://localhost:8080/api/teams/my-teams", {
+          const res = await axios.get("${API_URL}/api/teams/my-teams", {
             headers: { Authorization: `Bearer ${token}` }
           });
           setTeams(res.data);
@@ -47,7 +49,7 @@ export default function MyTeams() {
     
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:8080/api/teams/${teamId}`, {
+      await axios.delete(`${API_URL}/api/teams/${teamId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTeams(teams.filter(team => team.id !== teamId));
@@ -132,7 +134,7 @@ export default function MyTeams() {
                       <img
                         src={`http://localhost:8080${team.logoPath}`}
                         alt={`Logo de ${team.name}`}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">

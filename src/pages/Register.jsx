@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { UserPlus, User, Mail, Lock, Users, Loader2, AlertCircle } from "lucide-react";
+import { API_URL } from '../config';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ export default function Register() {
     setLoading(true);
     setErrorMsg("");
     try {
-      const res = await axios.post("http://localhost:8080/auth/register", formData);
+      const res = await axios.post("${API_URL}/auth/register", formData);
       localStorage.setItem("token", res.data.access_token);
 
       if (formData.role === "PLAYER") {

@@ -4,6 +4,8 @@ import Layout from "../components/Layout";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { Users, Upload, MapPin, Award, Info, ArrowLeft } from "lucide-react";
+import { API_URL } from '../config';
+
 
 export default function CreateTeam() {
   const { isAuthenticated, role, isLoading } = useAuth();
@@ -66,7 +68,7 @@ export default function CreateTeam() {
         formData.append("logo", logo);
       }
 
-      const response = await axios.post("http://localhost:8080/api/teams", formData, {
+      const response = await axios.post("${API_URL}/api/teams", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

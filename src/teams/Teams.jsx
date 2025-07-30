@@ -4,6 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import { Search, MapPin, Layers, Users, ChevronRight } from "lucide-react";
+import { API_URL } from '../config';
+
 
 export default function Teams() {
   const [teams, setTeams] = useState([]);
@@ -55,7 +57,7 @@ export default function Teams() {
 
     const fetchTeams = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/teams");
+        const res = await axios.get("${API_URL}/api/teams");
         setTeams(res.data);
       } catch (err) {
         console.error("Error al obtener equipos:", err);
@@ -75,7 +77,7 @@ export default function Teams() {
 
     try {
       await axios.post(
-        `http://localhost:8080/api/applications/apply/${teamId}`,
+        `${API_URL}/api/applications/apply/${teamId}`,
         "Me gustaría unirme a su equipo",
         {
           headers: {
@@ -201,7 +203,7 @@ export default function Teams() {
                         <img
                           src={`http://localhost:8080${team.logoPath}`}
                           alt={`Logo de ${team.name}`}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">

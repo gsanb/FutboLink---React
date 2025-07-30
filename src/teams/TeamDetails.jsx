@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
+import { API_URL } from '../config';
+
 
 export default function TeamDetails() {
   const { id } = useParams();
@@ -16,7 +18,7 @@ export default function TeamDetails() {
   useEffect(() => {
     const fetchTeam = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/api/teams/${id}`);
+        const res = await axios.get(`${API_URL}/api/teams/${id}`);
         setTeam(res.data);
       } catch (err) {
         console.error("Error al obtener el equipo:", err);
@@ -41,7 +43,7 @@ export default function TeamDetails() {
 
     try {
       await axios.post(
-        `http://localhost:8080/api/applications/apply/${teamId}`,
+        `${API_URL}/api/applications/apply/${teamId}`,
         "Me gustaría unirme a su equipo",
         {
           headers: {
@@ -99,7 +101,7 @@ export default function TeamDetails() {
           {team.logoPath && (
             <figure className="px-10 pt-10">
               <img 
-                src={`http://localhost:8080${team.logoPath}`} 
+                src={`${API_URL}${team.logoPath}`} 
                 alt={`Logo de ${team.name}`} 
                 className="rounded-xl max-h-64 object-contain mx-auto"
               />

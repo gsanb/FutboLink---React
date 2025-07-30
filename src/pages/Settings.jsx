@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
 import { User, Mail, Lock, LogOut, Trash2, Upload, Save, Key } from "lucide-react";
+import { API_URL } from '../config';
 
 export default function Ajustes() {
   const { isAuthenticated, role, isLoading } = useAuth();
@@ -31,14 +32,14 @@ export default function Ajustes() {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8080/api/users/me", {
+        const response = await axios.get("${API_URL}/api/users/me", {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
         setUser(response.data);
         if (response.data.avatarPath) {
-          setAvatarPreview(`http://localhost:8080${response.data.avatarPath}`);
+          setAvatarPreview(`${API_URL}${response.data.avatarPath}`);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -53,7 +54,7 @@ export default function Ajustes() {
   const updateProfile = async () => {
     setIsUpdating(true);
     try {
-      await axios.put("http://localhost:8080/api/users/me", user, {
+      await axios.put("${API_URL}/api/users/me", user, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -71,7 +72,7 @@ export default function Ajustes() {
     setIsChangingPassword(true);
     try {
       const response = await axios.put(
-        "http://localhost:8080/api/users/change-password",
+        "${API_URL}/api/users/change-password",
         passwordData,
         {
           headers: {
@@ -111,7 +112,7 @@ export default function Ajustes() {
     if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.")) return;
     
     try {
-      await axios.delete("http://localhost:8080/api/users/delete", {
+      await axios.delete("${API_URL}/api/users/delete", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }

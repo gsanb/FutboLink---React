@@ -4,6 +4,7 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
 import { ArrowLeft, Mail, User, Award, Info, CheckCircle, AlertTriangle } from "lucide-react";
+import { API_URL } from '../config';
 
 export default function EditarPerfilJugador() {
   const { isAuthenticated, role, isLoading } = useAuth();
@@ -40,7 +41,7 @@ const [avatarPreview, setAvatarPreview] = useState(""); // Para la previsualizac
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:8080/api/player/profile", {
+      const res = await axios.get("${API_URL}/api/player/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(res.data);

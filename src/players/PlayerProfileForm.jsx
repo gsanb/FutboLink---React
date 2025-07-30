@@ -3,6 +3,7 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { User, Award, Info, AlertTriangle, CheckCircle } from "lucide-react";
+import { API_URL } from '../config';
 
 
 
@@ -41,7 +42,7 @@ const [avatarPreview, setAvatarPreview] = useState(profile.photoUrl || "");
 
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/player/profile", {
+        const res = await axios.get("${API_URL}/api/player/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -75,7 +76,7 @@ const handleSubmit = async (e) => {
       formData.append("avatar", avatar);
     }
 
-    await axios.post("http://localhost:8080/api/player/profile", formData, {
+    await axios.post("${API_URL}/api/player/profile", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data"
@@ -161,7 +162,7 @@ const handleSubmit = async (e) => {
             // Sube la imagen al backend
             const formData = new FormData();
             formData.append("file", file);
-            const res = await axios.post("http://localhost:8080/api/player/upload-avatar", formData, {
+            const res = await axios.post("${API_URL}/api/player/upload-avatar", formData, {
               headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
             });
             setProfile(prev => ({ ...prev, photoUrl: res.data })); // res.data debe ser la URL devuelta
