@@ -41,7 +41,7 @@ const [avatarPreview, setAvatarPreview] = useState(""); // Para la previsualizac
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("${API_URL}/api/player/profile", {
+      const res = await axios.get(`${API_URL}/api/player/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(res.data);
@@ -49,7 +49,7 @@ const [avatarPreview, setAvatarPreview] = useState(""); // Para la previsualizac
         res.data.photoUrl
           ? res.data.photoUrl.startsWith("http")
             ? res.data.photoUrl
-            : `http://localhost:8080${res.data.photoUrl}`
+            : `${API_URL}${res.data.photoUrl}`
           : ""
       );
       setError(null);
@@ -81,7 +81,7 @@ const handleSubmit = async (e) => {
     if (avatar) {
       formData.append("avatar", avatar);
     }
-    await axios.post("http://localhost:8080/api/player/profile", formData, {
+    await axios.post(`${API_URL}api/player/profile`, formData, {
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
     });
     setMensaje("Perfil actualizado correctamente");

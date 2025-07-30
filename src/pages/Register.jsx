@@ -24,7 +24,7 @@ export default function Register() {
     setLoading(true);
     setErrorMsg("");
     try {
-      const res = await axios.post("${API_URL}/auth/register", formData);
+      const res = await axios.post(`${API_URL}/auth/register`, formData);
       localStorage.setItem("token", res.data.access_token);
 
       if (formData.role === "PLAYER") {

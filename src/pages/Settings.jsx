@@ -32,7 +32,7 @@ export default function Ajustes() {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("${API_URL}/api/users/me", {
+        const response = await axios.get(`${API_URL}/api/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -54,7 +54,7 @@ export default function Ajustes() {
   const updateProfile = async () => {
     setIsUpdating(true);
     try {
-      await axios.put("${API_URL}/api/users/me", user, {
+      await axios.put(`${API_URL}/api/users/me`, user, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -72,7 +72,7 @@ export default function Ajustes() {
     setIsChangingPassword(true);
     try {
       const response = await axios.put(
-        "${API_URL}/api/users/change-password",
+        `${API_URL}/api/users/change-password`,
         passwordData,
         {
           headers: {
@@ -112,7 +112,7 @@ export default function Ajustes() {
     if (!confirm("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.")) return;
     
     try {
-      await axios.delete("${API_URL}/api/users/delete", {
+      await axios.delete(`${API_URL}/api/users/delete`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }

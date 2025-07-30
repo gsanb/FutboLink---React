@@ -42,7 +42,7 @@ const [avatarPreview, setAvatarPreview] = useState(profile.photoUrl || "");
 
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("${API_URL}/api/player/profile", {
+        const res = await axios.get(`${API_URL}/api/player/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -76,7 +76,7 @@ const handleSubmit = async (e) => {
       formData.append("avatar", avatar);
     }
 
-    await axios.post("${API_URL}/api/player/profile", formData, {
+    await axios.post(`${API_URL}/api/player/profile`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data"

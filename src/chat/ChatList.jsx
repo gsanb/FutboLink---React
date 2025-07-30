@@ -14,7 +14,7 @@ export default function ChatList() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const res = await axios.get('${API_URL}/api/chat', {
+        const res = await axios.get(`${API_URL}/api/chat`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

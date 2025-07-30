@@ -29,7 +29,7 @@ export default function MyTeams() {
       const fetchTeams = async () => {
         try {
           const token = localStorage.getItem("token");
-          const res = await axios.get("${API_URL}/api/teams/my-teams", {
+          const res = await axios.get(`${API_URL}/api/teams/my-teams`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setTeams(res.data);
@@ -132,7 +132,7 @@ export default function MyTeams() {
                   <figure className="relative h-48 overflow-hidden">
                     {team.logoPath ? (
                       <img
-                        src={`http://localhost:8080${team.logoPath}`}
+                        src={`${API_URL}${team.logoPath}`}
                         alt={`Logo de ${team.name}`}
                         className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                       />

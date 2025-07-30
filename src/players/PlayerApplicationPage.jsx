@@ -22,7 +22,7 @@ export default function PlayerApplicationsPage() {
 
     const fetchApplications = async () => {
       try {
-        const res = await axios.get("${API_URL}/api/applications/player", {
+        const res = await axios.get(`${API_URL}/api/applications/player`, {
           headers: {
             Authorization: `Bearer ${authState.token}`,
           },

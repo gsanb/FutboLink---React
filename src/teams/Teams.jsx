@@ -57,7 +57,7 @@ export default function Teams() {
 
     const fetchTeams = async () => {
       try {
-        const res = await axios.get("${API_URL}/api/teams");
+        const res = await axios.get(`${API_URL}/api/teams`);
         setTeams(res.data);
       } catch (err) {
         console.error("Error al obtener equipos:", err);

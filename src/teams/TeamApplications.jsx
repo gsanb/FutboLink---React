@@ -22,7 +22,7 @@ export default function TeamApplications() {
     const fetchApplications = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("${API_URL}/api/applications/team", {
+        const res = await axios.get(`${API_URL}/api/applications/team`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

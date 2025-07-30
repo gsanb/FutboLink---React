@@ -68,7 +68,7 @@ export default function CreateTeam() {
         formData.append("logo", logo);
       }
 
-      const response = await axios.post("${API_URL}/api/teams", formData, {
+      const response = await axios.post(`${API_URL}/api/teams`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
