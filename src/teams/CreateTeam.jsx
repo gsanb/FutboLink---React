@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { Users, Upload, MapPin, Award, Info, ArrowLeft } from "lucide-react";
-import { API_URL } from '../config';
+import { API_URL } from './config';
 
 
 export default function CreateTeam() {

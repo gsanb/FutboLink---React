@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { User, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react";
-import { API_URL } from '../config';
+import { API_URL } from './config';
 document.documentElement.setAttribute("data-theme", "lemonade");
 
 export default function Login() {

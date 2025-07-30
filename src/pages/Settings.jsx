@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
 import { User, Mail, Lock, LogOut, Trash2, Upload, Save, Key } from "lucide-react";
-import { API_URL } from '../config';
+import { API_URL } from './config';
 
 export default function Ajustes() {
   const { isAuthenticated, role, isLoading } = useAuth();

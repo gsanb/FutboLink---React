@@ -4,7 +4,7 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import Layout from "../components/Layout";
 import { Mail, User, Check, X, MessageSquare, Clock, AlertCircle } from "lucide-react";
-import { API_URL } from '../config';
+import { API_URL } from './config';
 
 
 export default function TeamApplications() {

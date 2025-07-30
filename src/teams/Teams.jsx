@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import { Search, MapPin, Layers, Users, ChevronRight } from "lucide-react";
-import { API_URL } from '../config';
+import { API_URL } from './config';
 
 
 export default function Teams() {

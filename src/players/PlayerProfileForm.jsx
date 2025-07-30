@@ -3,7 +3,7 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { User, Award, Info, AlertTriangle, CheckCircle } from "lucide-react";
-import { API_URL } from '../config';
+import { API_URL } from './config';
 
 
 
